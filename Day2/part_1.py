@@ -40,9 +40,9 @@ def determine_result(a, b):
     b = int(b)
     if a == b: # draw
         return 3 + b
-    if (a > b and a == 3 and b == 1): # rock beats scissors - win
+    if (a == 3 and b == 1): # rock beats scissors - win
         return 6 + b
-    if (b > a and b == 3 and a == 1): # rock beats scissors - lose
+    if (b == 3 and a == 1): # rock beats scissors - lose
         return 0 + b 
     if b > a : #  win
         return 6 + b
