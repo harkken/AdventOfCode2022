@@ -30,7 +30,7 @@ def check_left(row, col, num):
     """
     vis from left
     """
-    num > max(matrix[row][:col])
+    return num > max(matrix[row][:col])
 
 def check_right(row, col, num):
     """
@@ -52,7 +52,6 @@ def check_bottom(row, col, num):
 
 def run_checks(row, col, num):
     return check_left(row, col, num) or check_right(row, col, num) or check_bottom(row, col, num) or check_top(row, col, num)
-
 
 
 count = 0
