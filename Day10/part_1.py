@@ -43,21 +43,22 @@ cycles = 0
 #signal_strengh = cpu_reg * cycles
 with open("input.txt", "r") as file:
     for line in file:
-        if cycles == 20 or cycles == 60 or cycles == 100 or cycles == 140 or cycles == 180 or cycles == 220:
-            print_signal_strength(cycles, cpu_reg)
-
         if "addx" in line:
             val = parse_add(line)
             cycles += 1
             # check if cycle count has been reached
             if cycles == 20 or cycles == 60 or cycles == 100 or cycles == 140 or cycles == 180 or cycles == 220:
                 print_signal_strength(cycles, cpu_reg)
+                count += cycles * cpu_reg
             cycles += 1
             if cycles == 20 or cycles == 60 or cycles == 100 or cycles == 140 or cycles == 180 or cycles == 220:
                 print_signal_strength(cycles, cpu_reg)
+                count += cycles * cpu_reg
             # 2 cycles passed, update register
             cpu_reg += val
 
         elif "noop" in line:
             cycles += 1
+
+print(count)
 
