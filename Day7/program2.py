@@ -35,7 +35,6 @@ def parse_file(line: str):
 
 def select_command(line: str):
     global current_node
-    # cd or ls command
     if "$ cd /" in line:
         pass
     if "$ cd .." in line:
@@ -61,14 +60,6 @@ def create_node(line):
     return Node(name, parent=current_node)  
 
 
-def tree_traversal2(treev, values):
-    for node in treev.children:
-        tree_traversal2(node, values)
-    children_vals = [child.size for child in treev.children]
-    if treev.size == 0:
-        treev.size += sum(children_vals)
-    values.append(treev.size + sum(children_vals))
-
 def tree_traversal(tree, values):
     for node in tree.children:
         tree_traversal(node, values) 
@@ -79,36 +70,16 @@ def set_folder_size(tree):
         return tree.size
     else:
         tree.size += sum([set_folder_size(child) for child in tree.children])
-    return tree.size
-
-
-def get_size(tree):
-    count = 0
-    for node in tree.children:
-        get_size(node)
-    count += node.size
-
-
+        return tree.size
 
 sizes = []
 open_file("input.txt")
 set_folder_size(tree)
 
 tree_traversal(tree, sizes)
-print("Total space in use is: ")
-print((sorted(sizes, reverse=True)))
 
-print('Space left is:')
 space_left = 70000000 - (sorted(sizes, reverse=True)[0])
-print(space_left)
-
-print('Space required is:')
 space_required = 30000000 - space_left
-print(space_required)
-
-print(f"Finding the smallest directory of size {space_required} or greater . . .")
-
-res_sizes = []
 
 for item in sorted(sizes):
     if item >= space_required:
