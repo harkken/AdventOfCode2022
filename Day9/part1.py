@@ -3,41 +3,36 @@ Advent of Code
 2022 - Day 9 - Rope Bridge
 
 """
+X = 0
+Y = 1
+DOWN = -1   # 0, -1 - down (neg)
+UP = 1      # 0, 1  - up (pos)
+LEFT = -1   # -1, 0 - left  (neg)
+RIGHT = 1   # 1, 0  - right (pos)
 
-# create variables
+
+# init variables
 start_position, head, tail, prev_head_pos = [0,0], [0,0], [0,0], [0,0]
 
 # holds the positions visited by the tail
 grid = [start_position]
 
+def move_head(num_steps, axis, direction):
+    global head, prev_head_pos   
+    for _ in range(num_steps):
+        prev_head_pos = list(head) # copy value not reference!
+        head[axis] += direction
+        check_tail_pos()    
+
 def move(direction, num_steps): 
-    global head, prev_head_pos
     if direction == "up":
-        for _ in range(num_steps):
-            prev_head_pos = list(head)
-            head[1] += 1
-            check_tail_pos()    
+        move_head(num_steps, Y, UP)
     elif direction == "down":
-        for _ in range(num_steps):
-            prev_head_pos = list(head)
-            head[1] -= 1
-            check_tail_pos()    
+        move_head(num_steps, Y, DOWN)
     elif direction == "left":
-        for _ in range(num_steps):
-            prev_head_pos = list(head)
-            head[0] -= 1
-            check_tail_pos()    
+        move_head(num_steps, X, LEFT) 
     elif direction == "right":
-        for _ in range(num_steps):
-            prev_head_pos = list(head)
-            head[0] += 1
-            check_tail_pos()
-    
-# x, y
-# 0, 1  - up   (pos)
-# 0, -1 - down (neg)
-# -1, 0 - left  (neg)
-# 1, 0  - right (pos)
+        move_head(num_steps, X, RIGHT)
 
 
 def check_if_visited(spot):
@@ -78,8 +73,8 @@ print(len(grid))
 
 """
 Notes: 
-- if tail needs to move we can just move into a previous head position,
-so just keep that stored and use that value when needed
+If tail needs to move we can just move into a previous head position,
+so just keep that stored and use that value when needed.
 
 Answer: 6498
 """
