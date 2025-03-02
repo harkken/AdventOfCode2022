@@ -14,8 +14,8 @@ RIGHT = 1   # 1, 0  - right (pos)
 # init 9 variable positions
 start_position = [0,0]
 """
-head  = [0,0] 
-pos_1 = [0,0] 
+head   = [0,0] 
+pos_1  = [0,0] 
 pos_2  = [0,0] 
 pos_3  = [0,0]
 pos_4  = [0,0]

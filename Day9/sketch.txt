@@ -1,0 +1,42 @@
+......
+......
+......
+....H.
+4321.. 
+
+......
+......
+....H.
+.4321.
+5..... 
+
+
+
+"""
+Have a 2D coord system
+
+. . . .
+. . . .
+. . . .
+. . . .
+
+ways of storing data
+
+list of lists
+
+dicttionary
+"""
+
+
+move(steps, direction)
+
+for steps in direction:
+    move head
+    move segments
+
+
+"""
+if we are moving the pieces, we can always consider the piece in front of it
+having a list would help with this 
+
+"""
