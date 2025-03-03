@@ -8,9 +8,8 @@ Otherwise, if the head and tail aren't touching and aren't in the same row or co
 the tail always moves one step diagonally to keep up:
 """
 
-
 segments = [[0, 0]] * 10
-visited = [[0,0]]
+visited = [[0, 0]]
 
 
 DOWN = [0, -1]
@@ -62,20 +61,20 @@ def move_segments(compass: str):
     Move head and body segments by looping through the segments
     """
     direction = directions[compass]
-    for i, segment in enumerate(segments):
+    for i, _ in enumerate(segments):
         if i == 0:
-            #head is unique in that it only responds to 4 directions
-            move_head(direction, segment)
+            # head is unique in that it only responds to 4 directions
+            move_head(segments, direction)
         else:
-            move_body(i, segment, direction)
+            move_body(i, direction)
 
 
-def move_body(i, segment, direction):
+def move_body(i, direction):
     """
     Move body segments
     """
     # we need the previous piece to determine which type of move it is
-    current_segment = segment
+    current_segment = segments[i]
     previous_segment = segments[i - 1]
     move_in_direction(current_segment, previous_segment, direction, i)
 
@@ -84,10 +83,13 @@ def move_in_direction(current_segment, previous_segment, direction, index):
     """
     Determine which direction to move the body segments.
     Can be diagonal.
-    Sometimes there is no move if they are overlapping 
+    Sometimes there is no move if they are overlapping
     or already adjacent
     """
-    if is_adjacent(current_segment, previous_segment) or current_segment == previous_segment:
+    if (
+        is_adjacent(current_segment, previous_segment)
+        or current_segment == previous_segment
+    ):
         return
     if is_row(current_segment, previous_segment):
         segments[index] = [sum(x) for x in zip(current_segment, direction)]
@@ -95,9 +97,10 @@ def move_in_direction(current_segment, previous_segment, direction, index):
         segments[index] = [sum(x) for x in zip(current_segment, direction)]
     else:
         # we know its diagonal
-        diagonal_move_adjacent(current_segment, previous_segment, index)
+        diagonal_move_adjacent(segments, current_segment, previous_segment, index)
 
     if segments[index] not in visited and index == 9:
+        print(segments[index])
         visited.append(segments[index])
 
 
@@ -135,11 +138,17 @@ def is_column(current_segment, previous_segment):
     """
     return current_segment[1] == previous_segment[1]
 
-def diagonal_move_adjacent(current_segment, previous_segment, index):
+
+def diagonal_move_adjacent(segment_list, current_segment, previous_segment, index):
     """
     When we know we need a diagonal move, only one of those moves will move it into an adjacent spot
     to the previous segment. Therefore we can calculate which adjacent move will put that segment next
     to it and select that one.
+
+    . . .
+    . P .
+    . . .
+    C . .
     """
     # make adjacency_list for the previous segment
     adjacency_list = []
@@ -149,20 +158,19 @@ def diagonal_move_adjacent(current_segment, previous_segment, index):
     # find out which diagonal move will get the current adjacent to the previous
     for direction in diagonal:
         if [sum(x) for x in zip(current_segment, direction)] in adjacency_list:
-            segments[index] = [sum(x) for x in zip(current_segment, direction)]
+            segment_list[index] = [sum(x) for x in zip(current_segment, direction)]
             break
 
 
-def move_head(direction: str, segment):
+def move_head(segment_list, direction: list):
     """
     Move the head in one of 4 directions:
     N, S, W, E
     """
-    segments[0] = [sum(x) for x in zip(segment, direction)]
-    # from ipdb import set_trace; set_trace();
+    segment_list[0] = [sum(x) for x in zip(segment_list[0], direction)]
 
 
 if __name__ == "__main__":
     parse_file()
-    #from ipdb import set_trace; set_trace();
+    # from ipdb import set_trace; set_trace();
     print(len(visited))
