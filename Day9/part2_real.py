@@ -34,7 +34,7 @@ def parse_file():
     """
     Main function
     """
-    with open("test.txt", "r", encoding="utf-8") as input_file:
+    with open("input.txt", "r", encoding="utf-8") as input_file:
         for line in input_file:
             parse_line(line)
 
@@ -60,7 +60,7 @@ def move_segments(compass: str):
     """
     Move head and body segments by looping through the segments
     """
-    direction = directions[compass]
+    direction = directions[compass] # could optimize by pulling this out earler, dont need to compute every time
     for i, _ in enumerate(segments):
         if i == 0:
             # head is unique in that it only responds to 4 directions
@@ -76,10 +76,10 @@ def move_body(i, direction):
     # we need the previous piece to determine which type of move it is
     current_segment = segments[i]
     previous_segment = segments[i - 1]
-    move_in_direction(current_segment, previous_segment, direction, i)
+    move_in_direction(current_segment, previous_segment, i)
 
 
-def move_in_direction(current_segment, previous_segment, direction, index):
+def move_in_direction(current_segment, previous_segment, index):
     """
     Determine which direction to move the body segments.
     Can be diagonal.
@@ -92,15 +92,24 @@ def move_in_direction(current_segment, previous_segment, direction, index):
     ):
         return
     if is_row(current_segment, previous_segment):
-        segments[index] = [sum(x) for x in zip(current_segment, direction)]
+        if [sum(x) for x in zip(current_segment, [2,0])] == previous_segment:
+            segments[index] = [sum(x) for x in zip(current_segment, [1,0])]
+        
+        elif [sum(x) for x in zip(current_segment, [-2,0])] == previous_segment:
+            segments[index] = [sum(x) for x in zip(current_segment, [-1,0])]
+
     elif is_column(current_segment, previous_segment):
-        segments[index] = [sum(x) for x in zip(current_segment, direction)]
+        if [sum(x) for x in zip(current_segment, [0,2])] == previous_segment:
+            segments[index] = [sum(x) for x in zip(current_segment, [0,1])]
+
+        elif [sum(x) for x in zip(current_segment, [0,-2])] == previous_segment:
+            segments[index] = [sum(x) for x in zip(current_segment, [0,-1])]    
+
     else:
         # we know its diagonal
         diagonal_move_adjacent(segments, current_segment, previous_segment, index)
 
     if segments[index] not in visited and index == 9:
-        print(segments[index])
         visited.append(segments[index])
 
 
@@ -126,7 +135,7 @@ def is_row(current_segment, previous_segment):
     . . .
     . . .
     """
-    return current_segment[0] == previous_segment[0]
+    return current_segment[1] == previous_segment[1]
 
 
 def is_column(current_segment, previous_segment):
@@ -136,7 +145,7 @@ def is_column(current_segment, previous_segment):
     . . .
     x . .
     """
-    return current_segment[1] == previous_segment[1]
+    return current_segment[0] == previous_segment[0]
 
 
 def diagonal_move_adjacent(segment_list, current_segment, previous_segment, index):
@@ -172,5 +181,4 @@ def move_head(segment_list, direction: list):
 
 if __name__ == "__main__":
     parse_file()
-    # from ipdb import set_trace; set_trace();
     print(len(visited))
